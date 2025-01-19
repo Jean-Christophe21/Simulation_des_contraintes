@@ -66,6 +66,12 @@ class Materiau:
         else :
             self.G = 0
 
-    
+
+    # calculer les coefficients de Lamé
+    def calculer_coefficient_lambda(self) -> float:
+        return self.E * self.nu / ((1 + self.nu) * (1 - 2 * self.nu))
+
+    def calculer_coefficient_mu(self) -> float:
+        return self.E / ( 2 * (1 + self.nu))
 
  

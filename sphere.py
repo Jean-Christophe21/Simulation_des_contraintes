@@ -2,15 +2,12 @@ import math
 
 
 # classe parallelepipede
-class Cylindre :
+class Sphere :
     def __init__(self) -> None:
         super.init__()   # initialisation de la classe mère
-        self.surface_radiale = 0 
-        self.surface_axiale = 0
-        self.surface_radiale = 0 
+        self.surface = 0 
         self.volume = 0
         self.rayon = 0
-        self.hauteur = 0
 
 
     # getter
@@ -22,10 +19,6 @@ class Cylindre :
 
     def getrayon(self) -> float:
             return self.rayon
-
-
-    def getHauteur(self) -> float:
-            return self.hauteur
 
     # setter
     def setsurface(self, surface : float ) -> None:
@@ -46,24 +39,12 @@ class Cylindre :
         else :
             self.rayon = 0
 
-    def setHauteur(self, hauteur : float ) -> None:
-        if isinstance(hauteur, float) :
-            self.hauteur = hauteur
-        else :
-            self.hauteur = 0
 
 
     # calcul du volume d'une sphère
-    def calcul_volume_cylindre(self) -> float:
-        return math.pi * (self.rayon **2) * self.hauteur
+    def calcul_volume_sphere(self) -> float:
+        return (4/3)*math.pi*self.rayon**3
 
-    # calcul de la surface axiale d'une sphère
-    def calculer_surface_axiale_cylindre(self) -> float:
-        return 2*math.pi*self.hauteur
-
-    # calcul de la surface radiale d'une sphère
-    def calculer_surface_axiale_cylindre(self) -> float:
-         return 2*math.pi * self.rayon**2
-
-
-        
+    # calcul de la surface d'une sphère
+    def calculer_surface_sphere(self) -> float:
+        return 4*math.pi*self.rayon**2

@@ -1,1 +1,2 @@
-# Simulation_des_contraintes
+Dans le cadre d'un Projet à l'école Polytechnique de Lomé / Université de Lomé en Algèbre Tensorielle, les étudiants en Licence 2 Licence Fondamentale ont eu à travaillé sur diverses thèmes Ce qui fut le cas de notre groupe également. Le thème de notre projet s'intitule "l'analyse des contraintes sur les matériaux".
+Le fruit de notre travail est cette application qu'on a codé afin d'automatiser l'affichage des résultats des contraintes sur les matériaux. 

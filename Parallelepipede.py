@@ -1,16 +1,19 @@
 import matplotlib.pyplot as plt
 import numpy as np
-from poly3d import Poly3DCollection
+from mpl_toolkits.mplot3d.art3d import Poly3DCollection
+#from poly3d import Poly3DCollection
 
 # classe parallelepipede
 class Parallelepipede :
     def __init__(self) -> None:
-        super.init__()   # initialisation de la classe mère
+        #super.__init__()   # initialisation de la classe mère           cette ligne est une erreur car la classe mere est une classe abstraite
         self.surface = 0 
         self.volume = 0
-        self.longueur = 0
-        self.largeur = 0
-        self.hauteur = 0
+        self.longueur = 1
+        self.largeur = 1
+        self.hauteur = 1
+        self.sommets = None # les sommets du parallelepipede
+        self.faces = [] # les faces du parallelepipede
 
 
     # getter
@@ -63,7 +66,7 @@ class Parallelepipede :
 
     # calcul du volume d'une sphère
     def calcul_volume_parallelepipede(self)-> float :
-        return self.longueur * self.largeur * self.hauteur
+        return (self.longueur * self.largeur * self.hauteur)
 
         # calcul de la surface d'un parallelepipede
     def calcul_surface_parallelepipede(self)-> float :
@@ -73,58 +76,86 @@ class Parallelepipede :
 
     # partie d'Angelo
     #fonctions d'affichage dans la classe Parallélépipède
+
+    # initialisation des sommets et des faces du parallélépipède
+    def init_sommets_Parallelepipede(self):
+            self.sommets = np.array([
+                                     [0, 0, 0],
+                                     [self.largeur, 0, 0], 
+                                     [self.largeur, self.longueur, 0], 
+                                     [0, self.longueur, 0],
+                                     [0, 0, self.hauteur], 
+                                     [self.largeur, 0, self.hauteur], 
+                                     [self.largeur, self.longueur, self.hauteur],
+                                     [0, self.longueur, self.hauteur]
+                                     ])
+    
+
+    def init_faces_Parallelepipede(self):
+        self.faces = [
+            [self.sommets[0], self.sommets[1], self.sommets[2], self.sommets[3]],
+            [self.sommets[4], self.sommets[5], self.sommets[6], self.sommets[7]],
+            [self.sommets[0], self.sommets[1], self.sommets[5], self.sommets[4]],
+            [self.sommets[2], self.sommets[3], self.sommets[7], self.sommets[6]],
+            [self.sommets[1], self.sommets[2], self.sommets[6], self.sommets[5]],
+            [self.sommets[4], self.sommets[7], self.sommets[3], self.sommets[0]]
+        ]
+
+         
+
+        # affichage du parallélépipède
     def plot_Parallelepipede(self):
+
+        self.init_sommets_Parallelepipede()     # permet de s'assurer avant l'affichaqe que les sommets sont bien initialisés
+        self.init_faces_Parallelepipede()       # permet de s'assurer avant l'affichaqe que les faces sont bien initialisés
+
         # Création de la figure et des axes 3D
         fig = plt.figure()
         ax = fig.add_subplot(111, projection='3d')
-        sommets = np.array([[0, 0, 0], [self.largeur, 0, 0], [self.largeur, self.longueur, 0], [0, self.longueur, 0]
-                            [0, 0, self.hauteur], [self.largeur, 0, self.hauteur], [self.largeur, self.longueur, self.hauteur],
-                            [0, self.longueur, self.hauteur]])
+        # Définition des sommets du cube
+
         # Ajout des faces au graphique
-        poly3d = Poly3DCollection(faces, alpha=.25, linewidths=1, edgecolors='r')
+        poly3d = Poly3DCollection(self.faces, alpha=.25, linewidths=1, edgecolors='r')
         ax.add_collection3d(poly3d)
         # Ajustement des limites des axes
         ax.set_xlabel('X')
         ax.set_ylabel('Y')
         ax.set_zlabel('Z')
-        ax.set_xlim([0, largeur])
-        ax.set_ylim([0, longueur])
-        ax.set_zlim([0, hauteur])
+        ax.set_xlim([0, self.largeur])
+        ax.set_ylim([0, self.longueur])
+        ax.set_zlim([0, self.hauteur])
         # Affichage du modèle 3D
         plt.show()
 
-    def plot_Parallelepipede_avec_forces(forces):
+    def plot_Parallelepipede_avec_forces(self, forces):
+
+        self.init_sommets_Parallelepipede()     # permet de s'assurer avant l'affichaqe que les sommets sont bien initialisés
+        self.init_faces_Parallelepipede()       # permet de s'assurer avant l'affichaqe que les faces sont bien initialisés
+
         fig = plt.figure()
         ax = fig.add_subplot(111, projection='3d')
-        # Définir les faces du cube
-        faces = [
-            [sommets[0], sommets[1], sommets[2], sommets[3]],
-            [sommets[4], sommets[5], sommets[6], sommets[7]],
-            [sommets[0], sommets[1], sommets[5], sommets[4]],
-            [sommets[2], sommets[3], sommets[7], sommets[6]],
-            [sommets[1], sommets[2], sommets[6], sommets[5]],
-            [sommets[4], sommets[7], sommets[3], sommets[0]]
-        ]
+
         # Ajout des faces au graphique
-        poly3d = Poly3DCollection(faces, alpha=0.25, linewidths=1, edgecolors='r')
+        poly3d = Poly3DCollection(self.faces, alpha=0.25, linewidths=1, edgecolors='r')
         ax.add_collection3d(poly3d)
         # Ajout des forces au graphique
         for force in forces:
             direction, vector, magnitude = force
-            start_point = [largeur / 2, longeur / 2, hauteur / 2]
+            start_point = [self.largeur / 2, self.longeur / 2, self.hauteur / 2]
             vector = np.array(vector) * magnitude / max(
                 [magnitude for _, _, magnitude in forces])  # Ajustement de la longueur des vecteurs
             ax.quiver(
                 start_point[0], start_point[1], start_point[2],
                 vector[0], vector[1], vector[2],
-                color='b', length= longueur, normalize=True
+                color='b', length= self.longueur, normalize=True
             )
         # Ajustement des limites des axes
         ax.set_xlabel('X')
         ax.set_ylabel('Y')
         ax.set_zlabel('Z')
-        ax.set_xlim([0, largeur])
-        ax.set_ylim([0, longeur])
-        ax.set_zlim([0, hauteur])
+        ax.set_xlim([0, self.largeur])
+        ax.set_ylim([0, self.longeur])
+        ax.set_zlim([0, self.hauteur])
         # Affichage du modèle 3D
         plt.show()
+

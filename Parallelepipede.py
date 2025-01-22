@@ -159,3 +159,48 @@ class Parallelepipede :
         # Affichage du modèle 3D
         plt.show()
 
+
+
+# Fonctions qui permettent d'afficher le cube avec les contraintes
+
+
+#Fonction pour appliquer les déformation sur le cube
+def appliquer_deformation_maillage(self, maillage, deformation):
+    maillage_deforme = maillage.copy()
+    for i in range(len(maillage)):
+        maillage_deforme[i, :] = maillage[i, :] + np.dot(deformation, maillage[i, :])
+    return maillage_deforme
+
+# Création du maillage pour le cube
+def creer_maillage_Parallelepipede(self, largeur, longueur, hauteur, nb_points):
+    x = np.linspace(0, largeur, nb_points)
+    y = np.linspace(0, longueur, nb_points)
+    z = np.linspace(0, hauteur, nb_points)
+    return np.array(np.meshgrid(x, y, z)).T.reshape(-1, 3)
+
+def plot_Parallelepipede_contraintes(self, forces):
+    fig = plt.figure()
+    ax = fig.add_subplot(111, projection='3d')
+    # Nombre de points pour le maillage
+    nb_points = 70
+    # Création du maillage
+    maillage = self.creer_maillage_cube(self.largeur, self.longueur, self.hauteur, nb_points)
+    # Calculer les tenseurs
+    contraintes_totales, deformation_totale = self.calculer_tenseur_contraintes_et_deformation(forces, self.surface)
+    # Appliquer les contraintes au maillage
+    maillage_deforme = appliquer_deformation_maillage(maillage, deformation_totale)
+    # Calcule de la norme des contraintes pour chaque point du maillage
+    contraintes_norme = np.linalg.norm(contraintes_totales @ np.transpose(maillage), axis=0)
+    # Ajout des points du maillage avec des couleurs représentant les contraintes
+    sc = ax.scatter(maillage_deforme[:, 0], maillage_deforme[:, 1], maillage_deforme[:, 2], c=contraintes_norme, cmap=plt.cm.viridis)
+    # Création de la barre de couleurs
+    cbar = plt.colorbar(sc, ax=ax)
+    cbar.set_label('Intensité des contraintes')
+    ax.set_xlabel('X')
+    ax.set_ylabel('Y')
+    ax.set_zlabel('Z')
+    ax.set_xlim([0, self.largeur])
+    ax.set_ylim([0, self.longueur])
+    ax.set_zlim([0, self.hauteur])
+    # Affichage du modèle 3D
+    plt.show()

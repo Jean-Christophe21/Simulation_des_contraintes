@@ -10,15 +10,15 @@ class Materiau:
     def __init__(self):
         self.E = 0 # module de Young
         self.nu = 0 # coefficient de Poisson
-        #les coefficient de Lamé
+        #les coefficient de Lame
         self.lame = 0
         self.mu = 0
         #self.surface = 0 # surface de la section
         self.G = 0 #module de cisaillement
        
-    # les différentes méthodes du code autre que les getters et les setters
+    # les differentes methodes du code autre que les getters et les setters
     @abstractmethod
-    def appliquerMaillage(self) -> None:
+    def appliquerMaillage(self) :
         pass
 
     
@@ -28,23 +28,23 @@ class Materiau:
 
 
     def calcul_tenseurs(self, solide , E =0, nu=0, forces = [] ,surface=0) :
-        # coefficients de Lamé
+        # coefficients de Lame
         lambda_lame = (E * self.nu) / ((1 + self.nu) * (1 - 2 * self.nu)) 
         mu = E / (2 * (1 + self.nu))
-        # Initialiser les tenseurs de contrainte et de déformation
+        # Initialiser les tenseurs de contrainte et de deformation
         tenseur_deformation = np.zeros((3, 3))
         tenseur_contrainte = np.zeros((3, 3))
     
 
         if solide == "parallelepipede" :
-            # Boucle sur chaque force pour calculer les déformations et les contraintes
+            # Boucle sur chaque force pour calculer les deformations et les contraintes
             for force in forces:
                 direction, magnitude = force
 
                 # Calcul de la contrainte (en Pa)
                 sigma = magnitude / self.surface
 
-                # Déformation basée sur la direction de la force
+                # Deformation basee sur la direction de la force
                 if direction == 'x':
                     epsilon_xx = sigma / E
                     epsilon_yy = -nu * epsilon_xx
@@ -85,7 +85,7 @@ class Materiau:
                 tenseur_deformation += deformation
 
         elif solide == "cylindre" :
-            # Boucle sur chaque force pour calculer les déformations et les contraintes
+            # Boucle sur chaque force pour calculer les deformations et les contraintes
             for force in forces:
                 direction, magnitude = force
 
@@ -100,7 +100,7 @@ class Materiau:
                 # Calcul de la contrainte (en Pa)
                 sigma = magnitude / self.surface
 
-                # Déformation basée sur la direction de la force
+                # Deformation basee sur la direction de la force
                 if direction == 'axial':
                     epsilon_zz = sigma / E
                     epsilon_rr = -nu * epsilon_zz
@@ -124,7 +124,7 @@ class Materiau:
 
         elif solide == "sphere" :
 
-            # Boucle sur chaque force pour calculer les déformations et les contraintes
+            # Boucle sur chaque force pour calculer les deformations et les contraintes
             for force in forces:
                 direction, magnitude = force
 
@@ -137,7 +137,7 @@ class Materiau:
                 # Calcul de la contrainte (en Pa)
                 sigma = magnitude / surface
 
-                # Déformation basée sur la direction de la force
+                # Deformation basee sur la direction de la force
                 epsilon_rr = sigma / E
                 epsilon_tt = -nu * epsilon_rr
                 epsilon_pp = -nu * epsilon_rr
@@ -156,25 +156,12 @@ class Materiau:
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
     # getter
     def getE(self) -> float:  # get le module de Young
         return self.E
     def getnu(self) -> float: #get le coefficient de Poisson
         return self.nu
-    def getlame(self) -> float: #get le coefficient de Lamé
+    def getlame(self) -> float: #get le coefficient de Lame
         return self.lame
     def getmu(self) -> float: #get le module de cisaillement
         return self.mu
@@ -215,7 +202,7 @@ class Materiau:
             self.G = 0
 
 
-    # calculer les coefficients de Lamé
+    # calculer les coefficients de Lame
     def calculer_coefficient_lambda(self) -> float:
         return self.E * self.nu / ((1 + self.nu) * (1 - 2 * self.nu))
 

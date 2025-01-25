@@ -64,7 +64,7 @@ class Parallelepipede :
             self.hauteur = 0
 
 
-    # calcul du volume d'une sphère
+    # calcul du volume d'une sphere
     def calcul_volume_parallelepipede(self)-> float :
         return (self.longueur * self.largeur * self.hauteur)
 
@@ -75,9 +75,9 @@ class Parallelepipede :
 
 
     # partie d'Angelo
-    #fonctions d'affichage dans la classe Parallélépipède
+    #fonctions d'affichage dans la classe Parallelepipède
 
-    # initialisation des sommets et des faces du parallélépipède
+    # initialisation des sommets et des faces du parallelepipède
     def init_sommets_Parallelepipede(self):
             self.sommets = np.array([
                                      [0, 0, 0],
@@ -103,34 +103,35 @@ class Parallelepipede :
 
          
 
-        # affichage du parallélépipède
+        # affichage du parallelepipède
     def plot_Parallelepipede(self):
 
-        self.init_sommets_Parallelepipede()     # permet de s'assurer avant l'affichaqe que les sommets sont bien initialisés
-        self.init_faces_Parallelepipede()       # permet de s'assurer avant l'affichaqe que les faces sont bien initialisés
+        self.init_sommets_Parallelepipede()     # permet de s'assurer avant l'affichaqe que les sommets sont bien initialises
+        self.init_faces_Parallelepipede()       # permet de s'assurer avant l'affichaqe que les faces sont bien initialises
 
-        # Création de la figure et des axes 3D
+        # Creation de la figure et des axes 3D
         fig = plt.figure()
         ax = fig.add_subplot(111, projection='3d')
-        # Définition des sommets du cube
+        # Definition des sommets du cube
 
         # Ajout des faces au graphique
         poly3d = Poly3DCollection(self.faces, alpha=.25, linewidths=1, edgecolors='r')
         ax.add_collection3d(poly3d)
         # Ajustement des limites des axes
+        limit_ax = max(self.longueur, self.largeur, self.hauteur)
         ax.set_xlabel('X')
         ax.set_ylabel('Y')
         ax.set_zlabel('Z')
-        ax.set_xlim([0, self.largeur])
-        ax.set_ylim([0, self.longueur])
-        ax.set_zlim([0, self.hauteur])
+        ax.set_xlim([0, limit_ax])
+        ax.set_ylim([0, limit_ax])
+        ax.set_zlim([0, limit_ax])
         # Affichage du modèle 3D
         plt.show()
 
     def plot_Parallelepipede_avec_forces(self, forces):
 
-        self.init_sommets_Parallelepipede()     # permet de s'assurer avant l'affichaqe que les sommets sont bien initialisés
-        self.init_faces_Parallelepipede()       # permet de s'assurer avant l'affichaqe que les faces sont bien initialisés
+        self.init_sommets_Parallelepipede()     # permet de s'assurer avant l'affichaqe que les sommets sont bien initialises
+        self.init_faces_Parallelepipede()       # permet de s'assurer avant l'affichaqe que les faces sont bien initialises
 
         fig = plt.figure()
         ax = fig.add_subplot(111, projection='3d')
@@ -156,51 +157,53 @@ class Parallelepipede :
         ax.set_xlim([0, self.largeur])
         ax.set_ylim([0, self.longeur])
         ax.set_zlim([0, self.hauteur])
+        ax.set_zlabel('Z')
         # Affichage du modèle 3D
         plt.show()
 
 
 
-# Fonctions qui permettent d'afficher le cube avec les contraintes
+    # Fonctions qui permettent d'afficher le cube avec les contraintes
 
 
-#Fonction pour appliquer les déformation sur le cube
-def appliquer_deformation_maillage(self, maillage, deformation):
-    maillage_deforme = maillage.copy()
-    for i in range(len(maillage)):
-        maillage_deforme[i, :] = maillage[i, :] + np.dot(deformation, maillage[i, :])
-    return maillage_deforme
+    #Fonction pour appliquer les deformation sur le cube
+    def appliquer_deformation_maillage(self, maillage, deformation):
+        maillage_deforme = maillage.copy()
+        for i in range(len(maillage)):
+            maillage_deforme[i, :] = maillage[i, :] + np.dot(deformation, maillage[i, :])
+        return maillage_deforme
 
-# Création du maillage pour le cube
-def creer_maillage_Parallelepipede(self, largeur, longueur, hauteur, nb_points):
-    x = np.linspace(0, largeur, nb_points)
-    y = np.linspace(0, longueur, nb_points)
-    z = np.linspace(0, hauteur, nb_points)
-    return np.array(np.meshgrid(x, y, z)).T.reshape(-1, 3)
+    # Creation du maillage pour le cube
+    def creer_maillage_Parallelepipede(self, largeur, longueur, hauteur, nb_points):
+        x = np.linspace(0, largeur, nb_points)
+        y = np.linspace(0, longueur, nb_points)
+        z = np.linspace(0, hauteur, nb_points)
+        return np.array(np.meshgrid(x, y, z)).T.reshape(-1, 3)
 
-def plot_Parallelepipede_contraintes(self, forces):
-    fig = plt.figure()
-    ax = fig.add_subplot(111, projection='3d')
-    # Nombre de points pour le maillage
-    nb_points = 70
-    # Création du maillage
-    maillage = self.creer_maillage_cube(self.largeur, self.longueur, self.hauteur, nb_points)
-    # Calculer les tenseurs
-    contraintes_totales, deformation_totale = self.calculer_tenseur_contraintes_et_deformation(forces, self.surface)
-    # Appliquer les contraintes au maillage
-    maillage_deforme = appliquer_deformation_maillage(maillage, deformation_totale)
-    # Calcule de la norme des contraintes pour chaque point du maillage
-    contraintes_norme = np.linalg.norm(contraintes_totales @ np.transpose(maillage), axis=0)
-    # Ajout des points du maillage avec des couleurs représentant les contraintes
-    sc = ax.scatter(maillage_deforme[:, 0], maillage_deforme[:, 1], maillage_deforme[:, 2], c=contraintes_norme, cmap=plt.cm.viridis)
-    # Création de la barre de couleurs
-    cbar = plt.colorbar(sc, ax=ax)
-    cbar.set_label('Intensité des contraintes')
-    ax.set_xlabel('X')
-    ax.set_ylabel('Y')
-    ax.set_zlabel('Z')
-    ax.set_xlim([0, self.largeur])
-    ax.set_ylim([0, self.longueur])
-    ax.set_zlim([0, self.hauteur])
-    # Affichage du modèle 3D
-    plt.show()
+    def plot_Parallelepipede_contraintes(self, forces):
+        fig = plt.figure()
+        ax = fig.add_subplot(111, projection='3d')
+        # Nombre de points pour le maillage
+        nb_points = 70
+        # Creation du maillage
+        maillage = self.creer_maillage_cube(self.largeur, self.longueur, self.hauteur, nb_points)
+        # Calculer les tenseurs
+        contraintes_totales, deformation_totale = self.calculer_tenseur_contraintes_et_deformation(forces, self.surface)
+        # Appliquer les contraintes au maillage
+        maillage_deforme = self.appliquer_deformation_maillage(maillage, deformation_totale)
+        # Calcule de la norme des contraintes pour chaque point du maillage
+        contraintes_norme = np.linalg.norm(contraintes_totales @ np.transpose(maillage), axis=0)
+        # Ajout des points du maillage avec des couleurs representant les contraintes
+        sc = ax.scatter(maillage_deforme[:, 0], maillage_deforme[:, 1], maillage_deforme[:, 2], c=contraintes_norme, cmap=plt.cm.viridis)
+        # Creation de la barre de couleurs
+        cbar = plt.colorbar(sc, ax=ax)
+        cbar.set_label('Intensite des contraintes')
+        ax.set_xlabel('X')
+        ax.set_ylabel('Y')
+        ax.set_zlabel('Z')
+        limit_ax = max(self.longueur, self.largeur, self.hauteur)
+        ax.set_xlabel('X')
+        ax.set_ylabel('Y')
+        ax.set_zlabel('Z')
+        # Affichage du modèle 3D
+        plt.show()

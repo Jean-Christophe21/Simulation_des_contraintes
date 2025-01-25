@@ -5,7 +5,7 @@ VisualStudioVersion = 17.12.35707.178
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "Simulation_des_contraintes", "Simulation_des_contraintes.pyproj", "{274FA6B3-8EEC-4EE7-8B62-88BEB73D7B32}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Éléments de solution", "Éléments de solution", "{967342BE-1536-4A8D-B0D2-1895BF677FB3}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "elements de solution", "elements de solution", "{967342BE-1536-4A8D-B0D2-1895BF677FB3}"
 	ProjectSection(SolutionItems) = preProject
 		sphere.py = sphere.py
 	EndProjectSection

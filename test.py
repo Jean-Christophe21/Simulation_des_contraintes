@@ -11,10 +11,10 @@ def choix(event):
     if combo_shape.get() in values:
         if combo_shape.get()=="Sphere":
             def nouvelle_fenetre():
-                # Créer une nouvelle fenêtre
+                # Creer une nouvelle fenêtre
                 fenetre = tk.Toplevel(root)
                 fenetre.geometry("400x650+450+10")
-                vcmd = (fenetre.register(valider_entrée), '%P')
+                vcmd = (fenetre.register(valider_entree), '%P')
                 fenetre.title("Sphere")
                 rayon = tk.Label(fenetre, text="Entrez le rayon:")
                 rayon.pack(pady=5)
@@ -25,11 +25,11 @@ def choix(event):
 
         elif combo_shape.get()=="Parallelepipede":
             def nouvelle_fenetre():
-                # Créer une nouvelle fenêtre
+                # Creer une nouvelle fenêtre
                 fenetre = tk.Toplevel(root)
                 fenetre.geometry("400x650+450+10")
                 fenetre.title("Parallelepipede")
-                vcmd = (fenetre.register(valider_entrée), '%P')
+                vcmd = (fenetre.register(valider_entree), '%P')
                 longueur = tk.Label(fenetre, text="Entrez la longueur:")
                 longueur.pack(pady=5)
                 entry_longueur = tk.Entry(fenetre, validate="key", validatecommand=vcmd)
@@ -47,10 +47,10 @@ def choix(event):
 
         elif combo_shape.get()=="Cylindre":
             def nouvelle_fenetre():
-                # Créer une nouvelle fenêtre
+                # Creer une nouvelle fenêtre
                 fenetre = tk.Toplevel(root)
                 fenetre.geometry("400x650+450+10")
-                vcmd = (fenetre.register(valider_entrée), '%P')
+                vcmd = (fenetre.register(valider_entree), '%P')
                 fenetre.title("Cylindre")
                 rayon= tk.Label(fenetre, text="Entrez le rayon:")
                 rayon.pack(pady=5)
@@ -64,20 +64,20 @@ def choix(event):
             nouvelle_fenetre()
 
     else:
-        messagebox.showerror("Erreur", "Veuillez choisir un des materiau proposé.")
+        messagebox.showerror("Erreur", "Veuillez choisir un des materiau propose.")
 
 def analyze_data():
     try:
-        # Récupérer la forme du matériau
+        # Recuperer la forme du materiau
         material_shape = combo_shape.get()
-        # Récupérer les valeurs des contraintes
+        # Recuperer les valeurs des contraintes
         stress_x = float(entry_stress_x.get())
         stress_y = float(entry_stress_y.get())
         stress_z = float(entry_stress_z.get())
         stress_xy = float(entry_stress_xy.get())
         stress_xz = float(entry_stress_xz.get())
         stress_yz = float(entry_stress_yz.get())
-         # Exemple de traitement des données
+         # Exemple de traitement des donnees
         result = f"Forme: {material_shape}\n" \
         f"Contraintes: σ_x={stress_x}, σ_y={stress_y}, σ_z={stress_z}, " \
         f"τ_xy={stress_xy}, τ_xz={stress_xz}, τ_yz={stress_yz}"
@@ -87,24 +87,24 @@ def analyze_data():
           label_result.config(text="Veuillez entrer des valeurs valides.")
 
 
-# Créer la fenêtre principale
+# Creer la fenêtre principale
 root = tk.Tk()
-root.title("Analyse des Contraintes dans un Matériau")
+root.title("Analyse des Contraintes dans un Materiau")
 root.geometry("400x150+450+250")
 
-# Choix de la forme du matériau
-label_shape = tk.Label(root, text="Choisissez la forme du matériau :")
+# Choix de la forme du materiau
+label_shape = tk.Label(root, text="Choisissez la forme du materiau :")
 label_shape.pack(pady=20)
 
 combo_shape = ttk.Combobox(root, values=["Cylindre", "Parallelepipede", "Sphere"])
 combo_shape.pack(ipadx=25,ipady=5)
 combo_shape.bind("<Return>",choix)
 
-def valider_entrée(entrée) :
+def valider_entree(entree) :
     root.lower()
-    if entrée.isdigit():
+    if entree.isdigit():
         return True
-    elif entrée == "":
+    elif entree == "":
         return True
     else:
         messagebox.showerror("Erreur", "Veuillez entrer uniquement des nombres entiers.")
@@ -119,8 +119,8 @@ def contraintes(fenetre):
         global entry_stress_xz
         global entry_stress_yz
         global label_result
-        # Champs pour entrer les intensités des contraintes
-        vcmd = (fenetre.register(valider_entrée), '%P')
+        # Champs pour entrer les intensites des contraintes
+        vcmd = (fenetre.register(valider_entree), '%P')
         label_stress_x = tk.Label(fenetre, text="Entrez la contrainte σ_x (Pa) :")
         label_stress_x.pack(pady=5)
         entry_stress_x = tk.Entry(fenetre,validate="key", validatecommand=vcmd)
@@ -154,7 +154,7 @@ def contraintes(fenetre):
         button_analyze = tk.Button(fenetre, text="Analyser", command=analyze_data)
         button_analyze.pack(pady=20)
 
-        # Label pour afficher les résultats
+        # Label pour afficher les resultats
         label_result = tk.Label(fenetre, text="")
         label_result.pack(pady=10)
 

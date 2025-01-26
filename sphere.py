@@ -79,10 +79,10 @@ class Sphere :
         ax.set_ylim([-self.rayon, self.rayon])
         ax.set_zlim([-self.rayon, self.rayon])
 
-        # Affichage du modèle 3D
+        # Affichage du modele 3D
         plt.show()
 
-    # Fonction pour afficher la sphere avec les flèches des forces
+    # Fonction pour afficher la sphere avec les fleches des forces
     def plot_sphere_avec_forces(self, forces):
         fig = plt.figure()
         ax = fig.add_subplot(111, projection='3d')
@@ -117,7 +117,7 @@ class Sphere :
         ax.set_ylim([-self.rayon, self.rayon])
         ax.set_zlim([-self.rayon, self.rayon])
 
-        # Affichage du modèle 3D
+        # Affichage du modele 3D
         plt.show()
 
     # Creation du maillage pour la sphere
@@ -156,5 +156,5 @@ class Sphere :
         ax.set_xlim([-self.rayon, self.rayon])
         ax.set_ylim([-self.rayon, self.rayon])
         ax.set_zlim([-self.rayon, self.rayon])
-        # Affichage du modèle 3D
+        # Affichage du modele 3D
         plt.show()

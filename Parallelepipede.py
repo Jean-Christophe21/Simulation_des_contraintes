@@ -1,19 +1,20 @@
+from materiau import Materiau #importation de la classe mere
 import matplotlib.pyplot as plt
 import numpy as np
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 #from poly3d import Poly3DCollection
 
 # classe parallelepipede
-class Parallelepipede :
+class Parallelepipede(Materiau) :
     def __init__(self) -> None:
-        #super.__init__()   # initialisation de la classe mère           cette ligne est une erreur car la classe mere est une classe abstraite
-        self.surface = 0 
+        super().__init__()   # initialisation de la classe mere          
         self.volume = 0
         self.longueur = 1
         self.largeur = 1
         self.hauteur = 1
         self.sommets = None # les sommets du parallelepipede
         self.faces = [] # les faces du parallelepipede
+        self.surface = 0 # surface du parallelepipede
 
 
     # getter
@@ -75,9 +76,9 @@ class Parallelepipede :
 
 
     # partie d'Angelo
-    #fonctions d'affichage dans la classe Parallelepipède
+    #fonctions d'affichage dans la classe Parallelepipede
 
-    # initialisation des sommets et des faces du parallelepipède
+    # initialisation des sommets et des faces du parallelepipede
     def init_sommets_Parallelepipede(self):
             self.sommets = np.array([
                                      [0, 0, 0],
@@ -103,7 +104,7 @@ class Parallelepipede :
 
          
 
-        # affichage du parallelepipède
+        # affichage du parallelepipede
     def plot_Parallelepipede(self):
 
         self.init_sommets_Parallelepipede()     # permet de s'assurer avant l'affichaqe que les sommets sont bien initialises
@@ -125,7 +126,7 @@ class Parallelepipede :
         ax.set_xlim([0, limit_ax])
         ax.set_ylim([0, limit_ax])
         ax.set_zlim([0, limit_ax])
-        # Affichage du modèle 3D
+        # Affichage du modele 3D
         plt.show()
 
     def plot_Parallelepipede_avec_forces(self, forces):
@@ -142,7 +143,7 @@ class Parallelepipede :
         # Ajout des forces au graphique
         for force in forces:
             direction, vector, magnitude = force
-            start_point = [self.largeur / 2, self.longeur / 2, self.hauteur / 2]
+            start_point = [self.largeur / 2, self.longueur / 2, self.hauteur / 2]
             vector = np.array(vector) * magnitude / max(
                 [magnitude for _, _, magnitude in forces])  # Ajustement de la longueur des vecteurs
             ax.quiver(
@@ -155,10 +156,10 @@ class Parallelepipede :
         ax.set_ylabel('Y')
         ax.set_zlabel('Z')
         ax.set_xlim([0, self.largeur])
-        ax.set_ylim([0, self.longeur])
+        ax.set_ylim([0, self.longueur])
         ax.set_zlim([0, self.hauteur])
         ax.set_zlabel('Z')
-        # Affichage du modèle 3D
+        # Affichage du modele 3D
         plt.show()
 
 
@@ -180,15 +181,16 @@ class Parallelepipede :
         z = np.linspace(0, hauteur, nb_points)
         return np.array(np.meshgrid(x, y, z)).T.reshape(-1, 3)
 
-    def plot_Parallelepipede_contraintes(self, forces):
+    def plot_Parallelepipede_contraintes(self,solide, forces):
+        self.surface = self.calcul_surface_parallelepipede() # calcul de la surface du parallelepipede
         fig = plt.figure()
         ax = fig.add_subplot(111, projection='3d')
         # Nombre de points pour le maillage
-        nb_points = 70
+        nb_points = 30
         # Creation du maillage
-        maillage = self.creer_maillage_cube(self.largeur, self.longueur, self.hauteur, nb_points)
+        maillage = self.creer_maillage_Parallelepipede(self.largeur, self.longueur, self.hauteur, nb_points)
         # Calculer les tenseurs
-        contraintes_totales, deformation_totale = self.calculer_tenseur_contraintes_et_deformation(forces, self.surface)
+        contraintes_totales, deformation_totale = super().calculer_tenseur_contraintes_et_deformation(solide, self.E, self.nu, forces, self.surface)
         # Appliquer les contraintes au maillage
         maillage_deforme = self.appliquer_deformation_maillage(maillage, deformation_totale)
         # Calcule de la norme des contraintes pour chaque point du maillage
@@ -205,5 +207,8 @@ class Parallelepipede :
         ax.set_xlabel('X')
         ax.set_ylabel('Y')
         ax.set_zlabel('Z')
-        # Affichage du modèle 3D
+        ax.set_xlim([0, limit_ax])
+        ax.set_ylim([0, limit_ax])
+        ax.set_zlim([0, limit_ax])
+        # Affichage du modele 3D
         plt.show()

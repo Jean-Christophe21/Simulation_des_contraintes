@@ -1,34 +1,23 @@
-﻿
-
-
-
-# -*- coding: utf-8 -*-
-import Parallelepipede as pp
-import sphere as sp 
-import Cylindre as cy
-
+﻿from cylindre import Cylindre
 
 forces = [
-    ('X', [1, 0, 0], 10),  # Force de magnitude 10 dans la direction X
-    ('Y', [0, 1, 0], 5),   # Force de magnitude 5 dans la direction Y
-    ('Z', [0, 0, 1], 8)    # Force de magnitude 8 dans la direction Z
+    ('x', [1, 0, 0], 100),  # Force de magnitude 10 dans la direction X
+    ('y', [0, 1, 0], 250),   # Force de magnitude 5 dans la direction Y
+    ('z', [0, 0, 1], -800)    # Force de magnitude 8 dans la direction Z
 ]
 
+solide = Cylindre()
+solide.rayon = 5
+solide.hauteur = 30
+solide.setE(110e9)
+solide.setnu(0.34)
+#solide.plot_cylindre()
+solide.plot_cylindre_avec_forces(forces)
 
 
 
-# test du paralelepipede
-solide = pp.Parallelepipede()
-solide.hauteur = 10
-solide.largeur = 5
-solide.longueur = 15
 
-
-print(solide.calcul_volume_parallelepipede())
-print(solide.calcul_surface_parallelepipede())
-solide.plot_Parallelepipede_contraintes(forces)
-
-
+"""
 
 # test du cylindre
 
@@ -51,7 +40,7 @@ solide.plot_sphere()
 
 
 
-"""
+
 
 from sympy.physics.units import volume
 
@@ -72,10 +61,10 @@ def choix(event):
         if combo_shape.get()=="Sphere":
             def nouvelle_fenetre():
                 global entry_rayon_sphere
-                # Créer une nouvelle fenêtre
+                # Creer une nouvelle fenêtre
                 fenetre = tk.Toplevel(root)
                 fenetre.geometry("400x650+450+10")
-                vcmd = (fenetre.register(valider_entrée), '%P')
+                vcmd = (fenetre.register(valider_entree), '%P')
                 fenetre.title("Sphere")
                 rayon = tk.Label(fenetre, text="Entrez le rayon:")
                 rayon.pack(pady=5)
@@ -89,11 +78,11 @@ def choix(event):
                 global entry_longueur_para
                 global entry_largeur_para
                 global entry_hauteur_para
-                # Créer une nouvelle fenêtre
+                # Creer une nouvelle fenêtre
                 fenetre = tk.Toplevel(root)
                 fenetre.geometry("400x650+450+10")
                 fenetre.title("Parallelepipede")
-                vcmd = (fenetre.register(valider_entrée), '%P')
+                vcmd = (fenetre.register(valider_entree), '%P')
                 longueur = tk.Label(fenetre, text="Entrez la longueur:")
                 longueur.pack(pady=3)
                 entry_longueur_para = tk.Entry(fenetre, validate="key", validatecommand=vcmd)
@@ -114,10 +103,10 @@ def choix(event):
             def nouvelle_fenetre():
                 global entry_rayon_cylindre
                 global entry_hauteur_cylindre
-                # Créer une nouvelle fenêtre
+                # Creer une nouvelle fenêtre
                 fenetre = tk.Toplevel(root)
                 fenetre.geometry("400x650+450+10")
-                vcmd = (fenetre.register(valider_entrée), '%P')
+                vcmd = (fenetre.register(valider_entree), '%P')
                 fenetre.title("Cylindre")
                 rayon= tk.Label(fenetre, text="Entrez le rayon:")
                 rayon.pack(pady=3)
@@ -131,13 +120,13 @@ def choix(event):
             nouvelle_fenetre()
 
     else:
-        messagebox.showerror("Erreur", "Veuillez choisir un des materiau proposé.")
+        messagebox.showerror("Erreur", "Veuillez choisir un des materiau propose.")
 
 def analyze_data():
     try:
-        # Récupérer la forme du matériau
+        # Recuperer la forme du materiau
         material_shape = combo_shape.get()
-        # Récupérer les valeurs des contraintes
+        # Recuperer les valeurs des contraintes
         if(material_shape=="Parallelepipede"):
             # test du paralelepipede
             solide = pp.Parallelepipede()
@@ -167,7 +156,7 @@ def analyze_data():
         stress_xy = float(entry_stress_xy.get())
         stress_xz = float(entry_stress_xz.get())
         stress_yz = float(entry_stress_yz.get())
-             # Exemple de traitement des données
+             # Exemple de traitement des donnees
         result = f"Forme: {material_shape}\n" \
             f"Contraintes: σ_x={stress_x}, σ_y={stress_y}, σ_z={stress_z}, " \
             f"τ_xy={stress_xy}, τ_xz={stress_xz}, τ_yz={stress_yz} ,\nvolume={volume},surface={surface}"
@@ -177,24 +166,24 @@ def analyze_data():
           label_result.config(text="Veuillez entrer des valeurs valides.")
 
 
-# Créer la fenêtre principale
+# Creer la fenêtre principale
 root = tk.Tk()
-root.title("Analyse des Contraintes dans un Matériau")
+root.title("Analyse des Contraintes dans un Materiau")
 root.geometry("400x150+450+250")
 
-# Choix de la forme du matériau
-label_shape = tk.Label(root, text="Choisissez la forme du matériau :")
+# Choix de la forme du materiau
+label_shape = tk.Label(root, text="Choisissez la forme du materiau :")
 label_shape.pack(pady=20)
 
 combo_shape = ttk.Combobox(root, values=["Cylindre", "Parallelepipede", "Sphere"])
 combo_shape.pack(ipadx=25,ipady=5)
 combo_shape.bind("<Return>",choix)
 
-def valider_entrée(entrée) :
+def valider_entree(entree) :
     root.lower()
-    if entrée.isdigit():
+    if entree.isdigit():
         return True
-    elif entrée == "":
+    elif entree == "":
         return True
     else:
         messagebox.showerror("Erreur", "Veuillez entrer uniquement des nombres entiers.")
@@ -209,8 +198,8 @@ def contraintes(fenetre):
         global entry_stress_xz
         global entry_stress_yz
         global label_result
-        # Champs pour entrer les intensités des contraintes
-        vcmd = (fenetre.register(valider_entrée), '%P')
+        # Champs pour entrer les intensites des contraintes
+        vcmd = (fenetre.register(valider_entree), '%P')
         label_stress_x = tk.Label(fenetre, text="Entrez la contrainte σ_x (Pa) :")
         label_stress_x.pack(pady=3)
         entry_stress_x = tk.Entry(fenetre,validate="key", validatecommand=vcmd)
@@ -244,7 +233,7 @@ def contraintes(fenetre):
         button_analyze = tk.Button(fenetre, text="Analyser", command=analyze_data)
         button_analyze.pack(pady=20)
 
-        # Label pour afficher les résultats
+        # Label pour afficher les resultats
         label_result = tk.Label(fenetre, text="")
         label_result.pack(pady=10)
 
@@ -254,5 +243,49 @@ def contraintes(fenetre):
 root.mainloop()
 
 
+"""
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Contenu de ce fichier le main
+
+"""
+from parallelepipede import Parallelepipede
+
+
+
+forces = [
+    ('x', [1, 0, 0], 100),  # Force de magnitude 10 dans la direction X
+    ('y', [0, 1, 0], 250),   # Force de magnitude 5 dans la direction Y
+    ('z', [0, 0, 1], -800)    # Force de magnitude 8 dans la direction Z
+]
+
+
+
+
+# test du paralelepipede
+solide = Parallelepipede()
+solide.hauteur = 10
+solide.largeur = 5
+solide.longueur = 15
+solide.setE(110e9)
+solide.setnu(0.34)
+
+
+print(solide.calcul_volume_parallelepipede())
+print(solide.calcul_surface_parallelepipede())
+solide.plot_Parallelepipede()
+solide.plot_Parallelepipede_avec_forces(forces)
+solide.plot_Parallelepipede_contraintes("parallelepipede", forces)
 """
 

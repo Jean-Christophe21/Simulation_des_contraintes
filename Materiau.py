@@ -5,7 +5,7 @@ import numpy as np
 
 
 # Classe abstraite Materiau
-class Materiau:
+class Materiau(ABC):
     #constructeur de la classe
     def __init__(self):
         self.E = 0 # module de Young
@@ -15,19 +15,16 @@ class Materiau:
         self.mu = 0
         #self.surface = 0 # surface de la section
         self.G = 0 #module de cisaillement
+
        
+    """
     # les differentes methodes du code autre que les getters et les setters
     @abstractmethod
     def appliquerMaillage(self) :
         pass
+    """
 
-    
-
-
-
-
-
-    def calcul_tenseurs(self, solide , E =0, nu=0, forces = [] ,surface=0) :
+    def calculer_tenseur_contraintes_et_deformation(self, solide , E , nu, forces ,surface ) :
         # coefficients de Lame
         lambda_lame = (E * self.nu) / ((1 + self.nu) * (1 - 2 * self.nu)) 
         mu = E / (2 * (1 + self.nu))
@@ -37,9 +34,10 @@ class Materiau:
     
 
         if solide == "parallelepipede" :
+            deformation = np.zeros((3, 3)) # Initialiser le tenseur de deformation
             # Boucle sur chaque force pour calculer les deformations et les contraintes
             for force in forces:
-                direction, magnitude = force
+                direction, vector, magnitude = force
 
                 # Calcul de la contrainte (en Pa)
                 sigma = magnitude / self.surface

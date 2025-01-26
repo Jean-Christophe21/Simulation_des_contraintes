@@ -1,2 +1,2 @@
-Dans le cadre d'un Projet à l'ecole Polytechnique de Lome / Universite de Lome en Algèbre Tensorielle, les etudiants en Licence 2 Licence Fondamentale ont eu à travaille sur diverses thèmes Ce qui fut le cas de notre groupe egalement. Le thème de notre projet s'intitule "l'analyse des contraintes sur les materiaux".
+Dans le cadre d'un Projet à l'ecole Polytechnique de Lome / Universite de Lome en Algebre Tensorielle, les etudiants en Licence 2 Licence Fondamentale ont eu à travaille sur diverses themes Ce qui fut le cas de notre groupe egalement. Le theme de notre projet s'intitule "l'analyse des contraintes sur les materiaux".
 Le fruit de notre travail est cette application qu'on a code afin d'automatiser l'affichage des resultats des contraintes sur les materiaux. 

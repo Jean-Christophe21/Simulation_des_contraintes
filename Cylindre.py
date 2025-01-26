@@ -1,3 +1,4 @@
+from materiau import Materiau
 import math
 import matplotlib.pyplot as plt
 import numpy as np
@@ -5,9 +6,9 @@ from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 
 
 # classe parallelepipede
-class Cylindre :
+class Cylindre(Materiau):
     def __init__(self) -> None:
-        #super.init__()   # initialisation de la classe mère      cette ligne est une erreur car la classe mere est une classe abstraite
+        super().__init__()   # initialisation de la classe mere
         self.surface_radiale = 0 
         self.surface_axiale = 0
         self.surface_radiale = 0 
@@ -49,7 +50,7 @@ class Cylindre :
         else :
             self.rayon = 0
 
-    def setHauteur(self, hauteur : float ) -> None:
+    def setHauteur(self, hauteur: float) -> None:    # setter problématique. ne retourne pas la bonne valeur
         if isinstance(hauteur, float) :
             self.hauteur = hauteur
         else :
@@ -105,8 +106,13 @@ class Cylindre :
         y_grid = self.rayon * np.sin(theta_grid)
         ax.plot_surface(x_grid, y_grid, z_grid, alpha=0.25, color='cyan')
 
+        # Exemple de face pour le cylindre
+        verts = [
+            [[self.rayon, 0, 0], [-self.rayon, 0, 0], [-self.rayon, 0, self.hauteur], [self.rayon, 0, self.hauteur]]
+        ]
+
         # Ajout des faces au graphique
-        poly3d = Poly3DCollection(forces, alpha=0.25, linewidths=1, edgecolors='r')
+        poly3d = Poly3DCollection(verts, alpha=0.25, linewidths=1, edgecolors='r')
         ax.add_collection3d(poly3d)
         # Ajout des forces au graphique
         for force in forces:
@@ -123,7 +129,7 @@ class Cylindre :
         ax.set_xlim([-limit_ax, limit_ax])
         ax.set_ylim([-limit_ax, limit_ax])
         ax.set_zlim([0, limit_ax])
-        # Affichage du modèle 3D
+        # Affichage du modele 3D
         plt.show()
 
         # Fonctions qui permettent d'afficher le cylindre avec les contraintes
@@ -152,11 +158,11 @@ class Cylindre :
         x_grid = self.rayon * np.cos(theta_grid)
         y_grid = self.rayon * np.sin(theta_grid)
 
-        #flatten : methode des tableaux numpy qui renvoie une copie du tableau reduite à une dimension
+        #flatten : methode des tableaux numpy qui renvoie une copie du tableau reduite a une dimension
         maillage = np.array(np.meshgrid(x_grid.flatten(), y_grid.flatten(), z.flatten())).T.reshape(-1, 3)
 
         contraintes_totales, deformation_totale = self.calculer_tenseur_contraintes_et_deformation(np.pi * self.rayon ** 2)
-        maillage_deforme = appliquer_deformation_maillage(maillage, deformation_totale)
+        maillage_deforme = self.appliquer_deformation_maillage(maillage, deformation_totale)
 
         contraintes_norme = np.linalg.norm(contraintes_totales @ np.transpose(maillage), axis=0)
         sc = ax.scatter(maillage_deforme[:, 0], maillage_deforme[:, 1], maillage_deforme[:, 2], c=contraintes_norme,

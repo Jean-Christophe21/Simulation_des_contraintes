@@ -25,9 +25,11 @@ class Materiau(ABC):
     """
 
     def calculer_tenseur_contraintes_et_deformation(self, solide , E , nu, forces ,surface ) :
+        self.nu = nu
+        self.E = E
         # coefficients de Lame
-        lambda_lame = (E * self.nu) / ((1 + self.nu) * (1 - 2 * self.nu)) 
-        mu = E / (2 * (1 + self.nu))
+        self.lame = (E * self.nu) / ((1 + self.nu) * (1 - 2 * self.nu)) 
+        self.mu = E / (2 * (1 + self.nu))
         # Initialiser les tenseurs de contrainte et de deformation
         tenseur_deformation = np.zeros((3, 3))
         tenseur_contrainte = np.zeros((3, 3))
@@ -47,9 +49,9 @@ class Materiau(ABC):
                     epsilon_xx = sigma / E
                     epsilon_yy = -nu * epsilon_xx
                     epsilon_zz = -nu * epsilon_xx
-                    epsilon_xy = sigma / (2 * mu)
-                    epsilon_xz = sigma / (2 * mu)
-                    epsilon_yz = sigma / (2 * mu)
+                    epsilon_xy = sigma / (2 * self.mu)
+                    epsilon_xz = sigma / (2 * self.mu)
+                    epsilon_yz = sigma / (2 * self.mu)
                     deformation = np.array([
                         [epsilon_xx, epsilon_xy, epsilon_xz],
                         [epsilon_xy, epsilon_yy, 0],
@@ -59,9 +61,9 @@ class Materiau(ABC):
                     epsilon_xx = -nu * sigma / E
                     epsilon_yy = sigma / E
                     epsilon_zz = -nu * sigma / E
-                    epsilon_xy = sigma / (2 * mu)
-                    epsilon_xz = sigma / (2 * mu)
-                    epsilon_yz = sigma / (2 * mu)
+                    epsilon_xy = sigma / (2 * self.mu)
+                    epsilon_xz = sigma / (2 * self.mu)
+                    epsilon_yz = sigma / (2 * self.mu)
                     deformation = np.array([
                         [epsilon_xx, epsilon_xy, 0],
                         [epsilon_xy, epsilon_yy, epsilon_yz],
@@ -71,9 +73,9 @@ class Materiau(ABC):
                     epsilon_xx = -nu * sigma / E
                     epsilon_yy = -nu * sigma / E
                     epsilon_zz = sigma / E
-                    epsilon_xy = sigma / (2 * mu)
-                    epsilon_xz = sigma / (2 * mu)
-                    epsilon_yz = sigma / (2 * mu)
+                    epsilon_xy = sigma / (2 * self.mu)
+                    epsilon_xz = sigma / (2 * self.mu)
+                    epsilon_yz = sigma / (2 * self.mu)
                     deformation = np.array([
                         [epsilon_xx, 0, epsilon_xz],
                         [0, epsilon_yy, epsilon_yz],
@@ -83,20 +85,22 @@ class Materiau(ABC):
                 tenseur_deformation += deformation
 
         elif solide == "cylindre" :
+            deformation = np.zeros((3, 3)) # Initialiser le tenseur de deformation
+
             # Boucle sur chaque force pour calculer les deformations et les contraintes
             for force in forces:
                 direction, magnitude = force
 
-                '''Calcul de la surface en fonction de la direction
+                #Calcul de la surface en fonction de la direction
                 if direction == 'axial':
-                    surface = np.pi * rayon**2
+                    surface = np.pi * self.rayon**2
                 elif direction == 'radial':
-                    surface = 2 * np.pi * rayon * hauteur
+                    surface = 2 * np.pi * self.rayon * self.hauteur
                 else:
-                    continue'''
+                    continue
 
                 # Calcul de la contrainte (en Pa)
-                sigma = magnitude / self.surface
+                sigma = magnitude / surface
 
                 # Deformation basee sur la direction de la force
                 if direction == 'axial':
@@ -121,6 +125,7 @@ class Materiau(ABC):
                 tenseur_deformation += deformation
 
         elif solide == "sphere" :
+            deformation = np.zeros((3, 3)) # Initialiser le tenseur de deformation
 
             # Boucle sur chaque force pour calculer les deformations et les contraintes
             for force in forces:
@@ -148,7 +153,7 @@ class Materiau(ABC):
                 tenseur_deformation += deformation
 
         # Calcul du tenseur de contrainte
-        tenseur_contrainte = lambda_lame * np.trace(tenseur_deformation) * np.eye(3) + 2 * mu * tenseur_deformation
+        tenseur_contrainte = self.lame * np.trace(tenseur_deformation) * np.eye(3) + 2 * self.mu * tenseur_deformation
 
         return tenseur_contrainte, tenseur_deformation
 

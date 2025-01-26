@@ -61,12 +61,12 @@ class Cylindre(Materiau):
     def calcul_volume_cylindre(self) -> float:
         return math.pi * (self.rayon **2) * self.hauteur
 
-    # calcul de la surface axiale d'une sphere
-    def calculer_surface_axiale_cylindre(self) -> float:
-        return 2*math.pi*self.hauteur
+    # calcul de la surface latérale d'une sphere
+    def calculer_surface_lateral_cylindre(self) -> float:
+        return 2*math.pi*self.rayon*self.hauteur
 
-    # calcul de la surface radiale d'une sphere
-    def calculer_surface_axiale_cylindre(self) -> float:
+    # calcul de la surface axial d'une sphere
+    def calculer_surface_axial_cylindre(self) -> float:
          return 2*math.pi * self.rayon**2
 
 
@@ -106,14 +106,7 @@ class Cylindre(Materiau):
         y_grid = self.rayon * np.sin(theta_grid)
         ax.plot_surface(x_grid, y_grid, z_grid, alpha=0.25, color='cyan')
 
-        # Exemple de face pour le cylindre
-        verts = [
-            [[self.rayon, 0, 0], [-self.rayon, 0, 0], [-self.rayon, 0, self.hauteur], [self.rayon, 0, self.hauteur]]
-        ]
-
-        # Ajout des faces au graphique
-        poly3d = Poly3DCollection(verts, alpha=0.25, linewidths=1, edgecolors='r')
-        ax.add_collection3d(poly3d)
+        
         # Ajout des forces au graphique
         for force in forces:
             direction, vector, magnitude = force
@@ -149,11 +142,11 @@ class Cylindre(Materiau):
         return np.array(np.meshgrid(x, y, z)).T.reshape(-1, 3)
 
 
-    def plot_contraintes(self):
+    def plot_contraintes(self,forces):
         fig = plt.figure()
         ax = fig.add_subplot(111, projection='3d')
-        z = np.linspace(0, self.hauteur, 100)
-        theta = np.linspace(0, 2 * np.pi, 100)
+        z = np.linspace(0, self.hauteur, 10)                 # maillage un peu trop grand la réduire permet de vite afficher le solide
+        theta = np.linspace(0, 2 * np.pi, 10)                # réduire le maillage permet de vite afficher le solide à cette ligne aussi
         theta_grid, z_grid = np.meshgrid(theta, z)
         x_grid = self.rayon * np.cos(theta_grid)
         y_grid = self.rayon * np.sin(theta_grid)
@@ -161,7 +154,7 @@ class Cylindre(Materiau):
         #flatten : methode des tableaux numpy qui renvoie une copie du tableau reduite a une dimension
         maillage = np.array(np.meshgrid(x_grid.flatten(), y_grid.flatten(), z.flatten())).T.reshape(-1, 3)
 
-        contraintes_totales, deformation_totale = self.calculer_tenseur_contraintes_et_deformation(np.pi * self.rayon ** 2)
+        contraintes_totales, deformation_totale = self.calculer_tenseur_contraintes_et_deformation("cylindre",self.E,self.nu, forces,np.pi * self.rayon ** 2)
         maillage_deforme = self.appliquer_deformation_maillage(maillage, deformation_totale)
 
         contraintes_norme = np.linalg.norm(contraintes_totales @ np.transpose(maillage), axis=0)

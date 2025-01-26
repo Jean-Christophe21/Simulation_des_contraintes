@@ -1,9 +1,25 @@
 ﻿from cylindre import Cylindre
 
+
+"""
 forces = [
     ('x', [1, 0, 0], 100),  # Force de magnitude 10 dans la direction X
     ('y', [0, 1, 0], 250),   # Force de magnitude 5 dans la direction Y
     ('z', [0, 0, 1], -800)    # Force de magnitude 8 dans la direction Z
+]
+
+"""
+
+
+forces = [
+    ("axial", 200),  # Force axiale (en Newtons)
+    ("radial", 5000)   # Force radiale (en Newtons)
+]
+
+forces_suivant_axe = [
+    ('x', [1, 0, 0], 0),  # Force de magnitude 10 dans la direction X
+    ('y', [0, 1, 0], 500),   # Force de magnitude 5 dans la direction Y
+    ('z', [0, 0, 1], 200)    # Force de magnitude 8 dans la direction Z
 ]
 
 solide = Cylindre()
@@ -11,8 +27,10 @@ solide.rayon = 5
 solide.hauteur = 30
 solide.setE(110e9)
 solide.setnu(0.34)
-#solide.plot_cylindre()
-solide.plot_cylindre_avec_forces(forces)
+solide.plot_cylindre()
+solide.plot_cylindre_avec_forces(forces_suivant_axe)
+solide.plot_contraintes(forces)
+
 
 
 
@@ -27,6 +45,7 @@ solide.hauteur = 30
 print(solide.calcul_volume_cylindre())
 print(solide.calculer_surface_axiale_cylindre())
 solide.plot_cylindre()
+
 
 
 
@@ -242,7 +261,6 @@ def contraintes(fenetre):
 
 root.mainloop()
 
-
 """
 
 
@@ -257,9 +275,9 @@ root.mainloop()
 
 
 
+"""
 # Contenu de ce fichier le main
 
-"""
 from parallelepipede import Parallelepipede
 
 
@@ -287,5 +305,41 @@ print(solide.calcul_surface_parallelepipede())
 solide.plot_Parallelepipede()
 solide.plot_Parallelepipede_avec_forces(forces)
 solide.plot_Parallelepipede_contraintes("parallelepipede", forces)
+
+
+
+
+
+
 """
 
+
+"""
+
+from cylindre import Cylindre
+
+
+forces = [
+    ("axial", 200),  # Force axiale (en Newtons)
+    ("radial", 5000)   # Force radiale (en Newtons)
+]
+
+forces_suivant_axe = [     # représentation de la variable forces suivant les axes
+    ('x', [1, 0, 0], 0),  # Force de magnitude 10 dans la direction X
+    ('y', [0, 1, 0], 500),   # Force de magnitude 5 dans la direction Y
+    ('z', [0, 0, 1], 200)    # Force de magnitude 8 dans la direction Z
+]
+
+solide = Cylindre()
+solide.rayon = 5
+solide.hauteur = 30
+solide.setE(110e9)
+solide.setnu(0.34)
+solide.plot_cylindre()
+solide.plot_cylindre_avec_forces(forces_suivant_axe)
+solide.plot_contraintes(forces)
+
+
+
+
+"""
